@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import MapHeader from "./components/MapHeader";
 import MapPopup from "./components/MapPopup";
 import { useMapPanZoom } from "./hooks/useMapPanZoom";
-import { highlightPath } from "./utils/highlightPath";
+// import { highlightPath } from "./utils/highlightPath";
 import { createAnimatedPath } from "./utils/createAnimatedPath";
 import { animateRoute } from "./utils/animateRoute";
 import { applyNodeStyles } from "./utils/applyNodeStyles";
