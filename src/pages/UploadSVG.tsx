@@ -4,13 +4,31 @@ import UploadBox from "../components/Upload/UploadBox";
 import { useSVGUpload } from "../hook/useSVGClient";
 import InteractiveMap from "../components/Interactive/InteractiveMap";
 import { wakeServer } from "../api/client";
+import GroundFloor from "../assets/maps/GROUND.svg?url";
+import SecondFloor from "../assets/maps/Ground Floor.svg?url";
+
+const PRESET_MAPS = [
+  {
+    id: "ground-floor",
+    name: "Ground Floor",
+    url: GroundFloor,
+  },
+  {
+    id: "second-floor",
+    name: "Second Floor",
+    url: SecondFloor,
+  },
+];
 
 export default function UploadSVG() {
   const [file, setFile] = useState<File | null>(null);
   const [showSuccessPopup, setShowSuccessPopup] = useState(false);
   const [serverReady, setServerReady] = useState(false);
   const [serverMessage, setServerMessage] = useState("Starting server...");
-
+  // const [sourceType, setSourceType] = useState<"upload" | "preset">("upload");
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [selectedPreset, setSelectedPreset] = useState("");
+  console.log(serverMessage)
   const {
     uploading,
     progress,
@@ -24,11 +42,36 @@ export default function UploadSVG() {
     svgName,
   } = useSVGUpload();
 
+  const handleFileChange = (file: File) => {
+    setFile(file);
+
+    const url = URL.createObjectURL(file);
+    setPreviewUrl(url);
+  };
+
   const handleUpload = () => {
     if (!serverReady) return;
     if (!file) return;
 
     startUpload(file);
+  };
+
+  const handlePresetSelect = async (id: string) => {
+    setSelectedPreset(id);
+
+    const preset = PRESET_MAPS.find((x) => x.id === id);
+
+    if (!preset) return;
+
+    setPreviewUrl(preset.url);
+
+    const blob = await fetch(preset.url).then((r) => r.blob());
+
+    const svgFile = new File([blob], `${preset.name}.svg`, {
+      type: "image/svg+xml",
+    });
+
+    setFile(svgFile);
   };
 
   useEffect(() => {
@@ -62,6 +105,14 @@ export default function UploadSVG() {
       return () => clearTimeout(t);
     }
   }, [success]);
+
+  useEffect(() => {
+    return () => {
+      if (previewUrl?.startsWith("blob:")) {
+        URL.revokeObjectURL(previewUrl);
+      }
+    };
+  }, [previewUrl]);
 
   // const handleReset = () => {
   //   reset();
@@ -114,16 +165,20 @@ export default function UploadSVG() {
             Upload a structured SVG exported from Figma.
           </p>
 
-          {!serverReady && (
+          {/* {!serverReady && (
             <div className="mt-4 inline-flex items-center gap-2 rounded-xl border border-yellow-500/30 bg-yellow-500/10 px-4 py-2 text-sm text-yellow-300">
               <div className="h-2 w-2 rounded-full bg-yellow-400 animate-pulse" />
               {serverMessage}
             </div>
-          )}
+          )} */}
 
           <UploadBox
             file={file}
-            onFileChange={setFile}
+            previewUrl={previewUrl}
+            sampleMaps={PRESET_MAPS}
+            selectedSample={selectedPreset}
+            onSelectSample={handlePresetSelect}
+            onFileChange={handleFileChange}
             onUpload={handleUpload}
             uploading={uploading}
             progress={progress}
