@@ -40,6 +40,7 @@ export function renderMap(
   let userInteracting = false;
   // let autoFollowTimer: any = null;
 
+  console.log(userInteracting)
   function applyTransform() {
     svg.style.transform = `translate(${translate.x}px, ${translate.y}px) scale(${scale})`;
   }
