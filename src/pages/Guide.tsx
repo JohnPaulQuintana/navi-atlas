@@ -13,6 +13,7 @@ import {
   FiThumbsDown,
   FiCode,
 } from "react-icons/fi";
+import { AnimatePresence, motion } from "framer-motion";
 
 import frameMainFloorVideo from "../assets/videos/frame-main-floor.mp4";
 import SpaceVideo from "../assets/videos/Space.mp4";
@@ -20,6 +21,7 @@ import WalkableVideo from "../assets/videos/walkable.mp4";
 import IntersectionVideo from "../assets/videos/Intersection.mp4";
 import ExportVideo from "../assets/videos/Export.mp4";
 import DemoVideo from "../assets/videos/demo.mp4";
+import Masonry from "react-masonry-css";
 
 const steps = [
   {
@@ -52,7 +54,11 @@ Main Floor
       "Group the Rectangle and Text label together.",
       "Use group names such as S1, R1, or another consistent naming convention.",
     ],
-    important: ["Name your starting point as Entrance","Room names must be unique.", "Avoid special characters."],
+    important: [
+      "Name your starting point as Entrance",
+      "Room names must be unique.",
+      "Avoid special characters.",
+    ],
     validExamples: ["Room 1", "Room 2", "Library", "Registrar Office"],
     invalidExamples: ["Room_1", "Room-1", "Room#1"],
     hierarchy: `
@@ -148,9 +154,9 @@ Intersection
 ];
 
 export default function ViewGuide() {
-  const [expandedSteps, setExpandedSteps] = useState<Record<number, boolean>>(
-    {},
-  );
+  const [expandedSteps, setExpandedSteps] = useState<Record<number, boolean>>({
+    0: true,
+  });
   // const [activeVideo, setActiveVideo] = useState(null);
 
   const toggleStep = (index: number) => {
@@ -160,18 +166,24 @@ export default function ViewGuide() {
     }));
   };
 
+  const breakpointColumnsObj = {
+    default: 2,
+    1024: 2,
+    768: 1,
+  };
+
   return (
     <div className="w-full min-h-screen pt-28 px-6 text-white">
       <div className="max-w-5xl mx-auto">
         {/* Header Section */}
         <div className="text-center mb-12">
           <div className="inline-flex items-center gap-3 mb-4">
-            <h1 className="text-4xl md:text-6xl font-bold tracking-tight">
+            <h1 className="uppercase text-4xl md:text-6xl font-bold tracking-tight">
               SVG <span className="text-green-400">Structure Guide</span>
             </h1>
-            <span className="px-3 py-1 text-xs font-mono rounded-full bg-green-500/10 border border-green-500/20 text-green-400">
+            {/* <span className="px-3 py-1 text-xs font-mono rounded-full bg-green-500/10 border border-green-500/20 text-green-400">
               v1.0
-            </span>
+            </span> */}
           </div>
 
           <p className="text-lg text-white/70 max-w-2xl mx-auto leading-relaxed">
@@ -181,74 +193,91 @@ export default function ViewGuide() {
         </div>
 
         {/* Version Info Card */}
-        <div className="rounded-xl border border-green-500/20 bg-gradient-to-r from-blue-500/5 to-transparent p-6 mb-8">
-          <div className="flex items-start gap-4">
-            
-            <div className="flex-1">
-              <h3 className="font-semibold text-green-400 mb-2">
-                Version 1.0 Features
+        <div className="relative overflow-hidden rounded-2xl border border-green-500/20 bg-gradient-to-br from-green-500/10 via-blue-500/5 to-transparent p-6 mb-8">
+          {/* Glow Effect */}
+          <div className="absolute top-0 right-0 w-40 h-40 bg-green-500/10 blur-3xl rounded-full pointer-events-none" />
+
+          {/* Header */}
+          <div className="relative mb-5 text-center md:text-left">
+            {/* Glow */}
+            <div className="absolute left-1/2 top-0 -translate-x-1/2 md:left-0 md:translate-x-0 w-40 h-40 bg-green-500/20 blur-3xl rounded-full pointer-events-none" />
+
+            <div className="relative">
+              <div className="flex items-center justify-center md:justify-start gap-2 mb-3 flex-wrap">
+                <span className="px-2 py-1 text-xs font-mono rounded-full bg-green-500/10 border border-green-500/20 text-green-400">
+                  RELEASE
+                </span>
+
+                <span className="px-2 py-1 text-xs font-mono rounded-full bg-white/5 border border-white/10 text-white/60">
+                  v1.0.0
+                </span>
+              </div>
+
+              <h3 className="text-2xl md:text-3xl font-bold text-white">
+                NaviAtlas Initial Release
               </h3>
-              <p className="text-sm text-white/70 mb-4">
-                Indoor map simulation and SVG-based route generation. The system
-                extracts Spaces, Walkable Paths, and Intersection Nodes from
-                uploaded SVG files.
+
+              <p className="mt-3 text-white/70 max-w-2xl mx-auto md:mx-0">
+                Indoor map simulation powered by SVG parsing, route generation,
+                and real-time navigation visualization.
               </p>
+            </div>
+          </div>
 
-              <div className="grid md:grid-cols-2 gap-4 text-sm">
-                <div className="space-y-2">
-                  <div className="flex items-center gap-2 text-white/80">
-                    <div className="w-1.5 h-1.5 rounded-full bg-green-400"></div>
-                    <span>Automatic extraction of rooms and facilities</span>
-                  </div>
-                  <div className="flex items-center gap-2 text-white/80">
-                    <div className="w-1.5 h-1.5 rounded-full bg-green-400"></div>
-                    <span>Indoor route simulation and path visualization</span>
-                  </div>
-                  <div className="flex items-center gap-2 text-white/80">
-                    <div className="w-1.5 h-1.5 rounded-full bg-green-400"></div>
-                    <span>SVG structure validation and parsing</span>
-                  </div>
-                </div>
-                <div className="space-y-2">
-                  <div className="flex items-center gap-2 text-white/80">
-                    <div className="w-1.5 h-1.5 rounded-full bg-green-400"></div>
-                    <span>Interactive map navigation</span>
-                  </div>
-                  <div className="flex items-center gap-2 text-white/80">
-                    <div className="w-1.5 h-1.5 rounded-full bg-green-400"></div>
-                    <span>Configurable routing between locations</span>
-                  </div>
-                </div>
+          {/* Features */}
+          <div className="grid md:grid-cols-2 gap-3 mb-6">
+            {[
+              "Automatic room extraction",
+              "Indoor route simulation",
+              "SVG validation & parsing",
+              "Interactive navigation",
+              "Route visualization",
+              "Location-to-location routing",
+            ].map((feature) => (
+              <div
+                key={feature}
+                className="flex items-center gap-3 rounded-lg border border-white/5 bg-white/[0.03] px-3 py-2"
+              >
+                <div className="w-2 h-2 rounded-full bg-green-400" />
+                <span className="text-white/80 text-sm">{feature}</span>
               </div>
+            ))}
+          </div>
 
-              <div className="mt-4 pt-4 border-t border-white/10">
-                <p className="text-xs text-white/50 uppercase tracking-wider mb-2">
-                  Planned Improvements
-                </p>
-                <div className="flex flex-wrap gap-3 text-xs">
-                  <span className="px-2 py-1 rounded bg-white/5 text-white/60">
-                    Navigation menu generation
-                  </span>
-                  <span className="px-2 py-1 rounded bg-white/5 text-white/60">
-                    Search and quick navigation
-                  </span>
-                  <span className="px-2 py-1 rounded bg-white/5 text-white/60">
-                    Persistent SVG storage
-                  </span>
-                  <span className="px-2 py-1 rounded bg-white/5 text-white/60">
-                    Enhanced parsing APIs
-                  </span>
-                  <span className="px-2 py-1 rounded bg-white/5 text-white/60">
-                    Multi-floor support
-                  </span>
-                </div>
-              </div>
+          {/* Divider */}
+          <div className="h-px bg-gradient-to-r from-transparent via-white/10 to-transparent my-6" />
+
+          {/* Roadmap */}
+          <div>
+            <div className="flex items-center gap-2 mb-4">
+              <span className="text-white/50 uppercase tracking-[0.2em] text-xs">
+                Version 1.1 Roadmap
+              </span>
+            </div>
+
+            <div className="flex flex-wrap gap-2">
+              {[
+                "Room & Space Navigation Menu",
+                "Extracted Room Directory",
+                "ETA Calculation",
+                "Advanced Map Rendering",
+                "Complex SVG Support",
+                "Multi-Floor Navigation",
+                "API Documentation",
+              ].map((item) => (
+                <span
+                  key={item}
+                  className="px-3 py-1.5 rounded-full border border-white/10 bg-white/5 text-white/60 text-sm hover:text-white/80 transition"
+                >
+                  {item}
+                </span>
+              ))}
             </div>
           </div>
         </div>
 
         {/* Quick Navigation */}
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-2 mb-8">
+        {/* <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-2 mb-8">
           {steps.map((step, idx) => (
             <button
               key={idx}
@@ -258,16 +287,28 @@ export default function ViewGuide() {
               }}
               className="px-3 py-2 text-xs rounded-lg bg-white/5 border border-white/10 hover:bg-white/10 transition-colors text-left"
             >
-              <div className="font-mono text-green-400 text-[10px] mb-1">
+              <div className="font-mono text-green-400 text-base mb-1">
                 Step {idx + 1}
               </div>
               <div className="font-medium truncate">{step.title}</div>
             </button>
           ))}
+        </div> */}
+        {/* <div className="w-full h-px bg-gradient-to-r from-transparent via-green-400/40 to-transparent my-6" /> */}
+        <div className="flex items-center gap-4 my-6">
+          <div className="flex-1 h-px bg-gradient-to-r from-transparent via-green-400/40 to-transparent" />
+          <span className="font-semibold text-green-400 mb-2 text-xl">
+            SVG Structure Guide & Video Tutorials
+          </span>
+          <div className="flex-1 h-px bg-gradient-to-r from-transparent via-green-400/40 to-transparent" />
         </div>
 
         {/* Steps */}
-        <div className="space-y-4">
+        <Masonry
+          breakpointCols={breakpointColumnsObj}
+          className="flex gap-4"
+          columnClassName="space-y-4"
+        >
           {steps.map((step, idx) => {
             const Icon = step.icon;
             const isExpanded = expandedSteps[idx] || false;
@@ -313,164 +354,179 @@ export default function ViewGuide() {
                 </button>
 
                 {/* Expandable Content */}
-                {isExpanded && (
-                  <div className="px-6 pb-6 pt-2 border-t border-white/10">
-                    {/* Pro Tip Banner */}
-                    {step.tip && (
-                      <div className="mb-5 p-3 rounded-lg bg-green-500/5 border border-green-400/30">
-                        <p className="text-xs text-green-400 font-mono mb-1">
-                          NAVI-ATLAS TIP:
-                        </p>
-                        <p className="text-sm text-white/80">{step.tip}</p>
-                      </div>
-                    )}
+                <AnimatePresence initial={false}>
+                  {isExpanded && (
+                    <motion.div
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: "auto", opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      transition={{
+                        duration: 0.3,
+                        ease: "easeInOut",
+                      }}
+                      className="overflow-hidden"
+                    >
+                      <div className="px-6 pb-6 pt-2 border-t border-white/10">
+                        {/* Pro Tip Banner */}
+                        {step.tip && (
+                          <div className="mb-5 p-3 rounded-lg bg-green-500/5 border border-green-400/30">
+                            <p className="text-base text-green-400 font-mono mb-1">
+                              NAVI-ATLAS TIP:
+                            </p>
+                            <p className="text-base text-white/80">
+                              {step.tip}
+                            </p>
+                          </div>
+                        )}
 
-                    {/* Steps List */}
-                    <div className="mb-5">
-                      <h3 className="text-sm font-semibold text-white/60 mb-3">
-                        Steps
-                      </h3>
-                      <ul className="space-y-2">
-                        {step.bullets.map((bullet, i) => (
-                          <li
-                            key={i}
-                            className="flex items-start gap-3 text-sm text-white/80"
-                          >
-                            <span className="text-green-400 font-mono text-xs mt-0.5">
-                              {String(i + 1).padStart(2, "0")}
-                            </span>
-                            <span>{bullet}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
+                        {/* Steps List */}
+                        <div className="mb-5">
+                          <h3 className="text-sm font-semibold text-white/60 mb-3">
+                            Steps
+                          </h3>
+                          <ul className="space-y-2">
+                            {step.bullets.map((bullet, i) => (
+                              <li
+                                key={i}
+                                className="flex items-start gap-3 text-base text-white/80"
+                              >
+                                <span className="text-green-400 font-mono text-cls mt-0.5">
+                                  {String(i + 1).padStart(2, "0")}
+                                </span>
+                                <span>{bullet}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
 
-                    {/* Two Column Layout for Examples */}
-                    {(step.validExamples || step.invalidExamples) && (
-                      <div className="grid md:grid-cols-2 gap-4 mb-5">
-                        {step.validExamples && (
-                          <div className="rounded-lg border border-green-500/20 bg-green-500/5 p-4">
+                        {/* Two Column Layout for Examples */}
+                        {(step.validExamples || step.invalidExamples) && (
+                          <div className="grid md:grid-cols-2 gap-4 mb-5">
+                            {step.validExamples && (
+                              <div className="rounded-lg border border-green-500/20 bg-green-500/5 p-4">
+                                <div className="flex items-center gap-2 mb-3">
+                                  <span className="text-green-400">
+                                    <FiThumbsUp size={14} />
+                                  </span>
+
+                                  <h3 className="text-sm font-medium text-green-400">
+                                    Valid Examples
+                                  </h3>
+                                </div>
+                                <ul className="space-y-1">
+                                  {step.validExamples.map((item, i) => (
+                                    <li
+                                      key={i}
+                                      className=" text-white/70 font-mono text-xs"
+                                    >
+                                      {item}
+                                    </li>
+                                  ))}
+                                </ul>
+                              </div>
+                            )}
+
+                            {step.invalidExamples && (
+                              <div className="rounded-lg border border-red-500/20 bg-red-500/5 p-4">
+                                <div className="flex items-center gap-2 mb-3">
+                                  <span className="text-red-400">
+                                    <FiThumbsDown size={14} />
+                                  </span>
+
+                                  <h3 className="text-sm font-medium text-red-400">
+                                    Invalid Examples
+                                  </h3>
+                                </div>
+                                <ul className="space-y-1">
+                                  {step.invalidExamples.map((item, i) => (
+                                    <li
+                                      key={i}
+                                      className="text-sm text-white/70 font-mono"
+                                    >
+                                      {item}
+                                    </li>
+                                  ))}
+                                </ul>
+                              </div>
+                            )}
+                          </div>
+                        )}
+
+                        {/* Important Notes */}
+                        {step.important && (
+                          <div className="mb-5 p-4 rounded-lg bg-yellow-500/5 border border-yellow-500/20">
+                            <div className="flex items-center gap-2 mb-3">
+                              <span className="text-yellow-400">
+                                <FiAlertCircle size={14} />
+                              </span>
+
+                              <h3 className="text-sm font-medium text-yellow-400">
+                                Important Notes
+                              </h3>
+                            </div>
+                            <ul className="space-y-1">
+                              {step.important.map((item, i) => (
+                                <li
+                                  key={i}
+                                  className="text-sm text-white/70 flex items-start gap-2"
+                                >
+                                  <span className="text-yellow-400">→</span>
+                                  <span>{item}</span>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        )}
+
+                        {/* Hierarchy Structure */}
+                        {step.hierarchy && (
+                          <div className="mb-5">
                             <div className="flex items-center gap-2 mb-3">
                               <span className="text-green-400">
-                                <FiThumbsUp size={14} />
+                                <FiCode size={14} />
                               </span>
-
-                              <h3 className="text-sm font-medium text-green-400">
-                                Valid Examples
+                              <h3 className="text-sm font-medium text-white/60">
+                                Recommended Structure
                               </h3>
                             </div>
-                            <ul className="space-y-1">
-                              {step.validExamples.map((item, i) => (
-                                <li
-                                  key={i}
-                                  className=" text-white/70 font-mono text-xs"
-                                >
-                                  {item}
-                                </li>
-                              ))}
-                            </ul>
+                            <div className="bg-black/40 rounded-lg p-4 overflow-x-auto">
+                              <pre className="text-xs text-green-300/80 font-mono leading-relaxed">
+                                {step.hierarchy}
+                              </pre>
+                            </div>
                           </div>
                         )}
 
-                        {step.invalidExamples && (
-                          <div className="rounded-lg border border-red-500/20 bg-red-500/5 p-4">
+                        {/* Video */}
+                        {step.video && (
+                          <div>
                             <div className="flex items-center gap-2 mb-3">
-                              <span className="text-red-400">
-                                <FiThumbsDown size={14} />
+                              <span className="text-green-400">
+                                <FiPlayCircle size={14} />
                               </span>
-
-                              <h3 className="text-sm font-medium text-red-400">
-                                Invalid Examples
+                              <h3 className="text-sm font-medium text-white/60">
+                                Video Tutorial
                               </h3>
                             </div>
-                            <ul className="space-y-1">
-                              {step.invalidExamples.map((item, i) => (
-                                <li
-                                  key={i}
-                                  className="text-sm text-white/70 font-mono"
-                                >
-                                  {item}
-                                </li>
-                              ))}
-                            </ul>
+                            <video
+                              className="w-full rounded-lg border border-white/10"
+                              controls
+                              muted
+                              preload="metadata"
+                              poster={step.video.replace(".mp4", "-poster.jpg")}
+                            >
+                              <source src={step.video} type="video/mp4" />
+                            </video>
                           </div>
                         )}
                       </div>
-                    )}
-
-                    {/* Important Notes */}
-                    {step.important && (
-                      <div className="mb-5 p-4 rounded-lg bg-yellow-500/5 border border-yellow-500/20">
-                        <div className="flex items-center gap-2 mb-3">
-                          <span className="text-yellow-400">
-                            <FiAlertCircle size={14} />
-                          </span>
-
-                          <h3 className="text-sm font-medium text-yellow-400">
-                            Important Notes
-                          </h3>
-                        </div>
-                        <ul className="space-y-1">
-                          {step.important.map((item, i) => (
-                            <li
-                              key={i}
-                              className="text-sm text-white/70 flex items-start gap-2"
-                            >
-                              <span className="text-yellow-400">→</span>
-                              <span>{item}</span>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    )}
-
-                    {/* Hierarchy Structure */}
-                    {step.hierarchy && (
-                      <div className="mb-5">
-                        <div className="flex items-center gap-2 mb-3">
-                          <span className="text-green-400">
-                            <FiCode size={14} />
-                          </span>
-                          <h3 className="text-sm font-medium text-white/60">
-                            Recommended Structure
-                          </h3>
-                        </div>
-                        <div className="bg-black/40 rounded-lg p-4 overflow-x-auto">
-                          <pre className="text-xs text-green-300/80 font-mono leading-relaxed">
-                            {step.hierarchy}
-                          </pre>
-                        </div>
-                      </div>
-                    )}
-
-                    {/* Video */}
-                    {step.video && (
-                      <div>
-                        <div className="flex items-center gap-2 mb-3">
-                          <span className="text-green-400">
-                            <FiPlayCircle size={14} />
-                          </span>
-                          <h3 className="text-sm font-medium text-white/60">
-                            Video Tutorial
-                          </h3>
-                        </div>
-                        <video
-                          className="w-full rounded-lg border border-white/10"
-                          controls
-                          muted
-                          preload="metadata"
-                          poster={step.video.replace(".mp4", "-poster.jpg")}
-                        >
-                          <source src={step.video} type="video/mp4" />
-                        </video>
-                      </div>
-                    )}
-                  </div>
-                )}
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </div>
             );
           })}
-        </div>
+        </Masonry>
 
         {/* Footer */}
         <div className="mt-12 pt-8 border-t border-white/10 text-center">

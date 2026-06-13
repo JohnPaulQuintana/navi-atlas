@@ -120,7 +120,7 @@ export default function UploadSVG() {
   // };
 
   return (
-    <div className="mt-12 w-full h-screen text-white relative flex items-center justify-center px-6">
+    <div className="mt-12 md:mt-40 w-full h-screen text-white relative flex items-center justify-center px-6">
       {/* SUCCESS POPUP */}
       {showSuccessPopup && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-md">
@@ -157,7 +157,7 @@ export default function UploadSVG() {
         </div>
       ) : (
         <div className="w-full max-w-4xl text-center">
-          <h1 className="text-3xl md:text-5xl font-bold">
+          <h1 className="text-3xl md:text-5xl font-bold uppercase">
             Upload <span className="text-green-400">SVG Map</span>
           </h1>
 
