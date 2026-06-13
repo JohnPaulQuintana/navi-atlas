@@ -59,21 +59,19 @@ export default function UploadBox({
 
       {/* Sample Maps */}
       <div className="w-full">
-  <p className="text-sm text-white/60 mb-3">
-    Choose a sample map
-  </p>
+        <p className="text-sm text-white/60 mb-3">Choose a sample map</p>
 
-  <div className="grid grid-cols-2 gap-3">
-    {sampleMaps.map((map) => {
-      const active = selectedSample === map.id;
+        <div className="grid grid-cols-2 gap-3">
+          {sampleMaps.map((map) => {
+            const active = selectedSample === map.id;
 
-      return (
-        <button
-          key={map.id}
-          type="button"
-          disabled={uploading}
-          onClick={() => onSelectSample(map.id)}
-          className={`
+            return (
+              <button
+                key={map.id}
+                type="button"
+                disabled={uploading}
+                onClick={() => onSelectSample(map.id)}
+                className={`
             p-4 rounded-xl border transition-all text-left
             ${
               active
@@ -81,19 +79,15 @@ export default function UploadBox({
                 : "border-white/10 bg-white/5 hover:border-white/30"
             }
           `}
-        >
-          <div className="font-medium text-white">
-            {map.name}
-          </div>
+              >
+                <div className="font-medium text-white">{map.name}</div>
 
-          <div className="text-xs text-white/50 mt-1">
-            Sample SVG
-          </div>
-        </button>
-      );
-    })}
-  </div>
-</div>
+                <div className="text-xs text-white/50 mt-1">Sample SVG</div>
+              </button>
+            );
+          })}
+        </div>
+      </div>
 
       {/* Divider */}
       <div className="flex items-center w-full">
@@ -154,7 +148,8 @@ export default function UploadBox({
       {/* Server Status */}
       {!serverReady && (
         <div className="w-full rounded-xl border border-yellow-500/20 bg-yellow-500/10 px-4 py-3 text-yellow-300 text-sm">
-          Warming up server... This may take up to 60 seconds on first visit.
+          Waking up the server... Free hosting services put inactive servers to
+          sleep, so the first visit may take a minute or two.
         </div>
       )}
 
