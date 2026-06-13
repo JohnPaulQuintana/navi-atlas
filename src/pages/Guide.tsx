@@ -52,10 +52,13 @@ Main Floor
       "Group the Rectangle and Text label together.",
       "Use group names such as S1, R1, or another consistent naming convention.",
     ],
-    important: ["Room names must be unique.", "Avoid special characters."],
+    important: ["Name your starting point as Entrance","Room names must be unique.", "Avoid special characters."],
     validExamples: ["Room 1", "Room 2", "Library", "Registrar Office"],
     invalidExamples: ["Room_1", "Room-1", "Room#1"],
     hierarchy: `
+E1
+├─ Entrance (Rectangle) - important
+└─ Entrance (Text)
 S1
 ├─ Room 1 (Rectangle)
 └─ Room 1 (Text)
@@ -178,17 +181,11 @@ export default function ViewGuide() {
         </div>
 
         {/* Version Info Card */}
-        <div className="rounded-xl border border-blue-500/20 bg-gradient-to-r from-blue-500/5 to-transparent p-6 mb-8">
+        <div className="rounded-xl border border-green-500/20 bg-gradient-to-r from-blue-500/5 to-transparent p-6 mb-8">
           <div className="flex items-start gap-4">
-            <div className="flex-shrink-0">
-              <div className="w-10 h-10 rounded-lg bg-blue-500/10 flex items-center justify-center">
-                <span className="text-blue-400">
-                  <FiInfo size={20} />
-                </span>
-              </div>
-            </div>
+            
             <div className="flex-1">
-              <h3 className="font-semibold text-blue-400 mb-2">
+              <h3 className="font-semibold text-green-400 mb-2">
                 Version 1.0 Features
               </h3>
               <p className="text-sm text-white/70 mb-4">
@@ -320,9 +317,9 @@ export default function ViewGuide() {
                   <div className="px-6 pb-6 pt-2 border-t border-white/10">
                     {/* Pro Tip Banner */}
                     {step.tip && (
-                      <div className="mb-5 p-3 rounded-lg bg-green-500/5 border-l-2 border-green-400">
+                      <div className="mb-5 p-3 rounded-lg bg-green-500/5 border border-green-400/30">
                         <p className="text-xs text-green-400 font-mono mb-1">
-                          PRO TIP
+                          NAVI-ATLAS TIP:
                         </p>
                         <p className="text-sm text-white/80">{step.tip}</p>
                       </div>
@@ -460,6 +457,7 @@ export default function ViewGuide() {
                         <video
                           className="w-full rounded-lg border border-white/10"
                           controls
+                          muted
                           preload="metadata"
                           poster={step.video.replace(".mp4", "-poster.jpg")}
                         >

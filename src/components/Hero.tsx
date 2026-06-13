@@ -27,7 +27,7 @@ export default function Hero() {
         </p>
 
         {/* Buttons */}
-        <div className="mt-8 flex flex-col md:flex-row items-center justify-center gap-4">
+        <div className="mt-8 flex flex-row items-center justify-center gap-4">
           <button
             onClick={() => navigate("/upload")}
             className="flex items-center gap-2 px-6 py-3 rounded-xl bg-green-500 text-black font-semibold hover:bg-green-400 transition"
@@ -46,26 +46,47 @@ export default function Hero() {
         </div>
 
         {/* Feature points */}
-        <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6 text-white/70 text-sm">
-          <div className="p-5 rounded-2xl bg-white/5 border border-white/10 flex items-center gap-3 backdrop-blur-md hover:bg-white/10 hover:shadow-lg transition-all duration-300">
-            <span className="text-green-400 text-xl flex-shrink-0">
-              <FiMapPin size={20} />
-            </span>
-            <span className="font-medium">Custom SVG map support</span>
+        <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="p-5 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-md hover:bg-white/10 hover:shadow-lg transition-all duration-300">
+            <div className="flex gap-3">
+              <FiMapPin
+                className="text-green-400 flex-shrink-0 mt-1"
+                size={20}
+              />
+
+              <div className="text-start">
+                <h3 className="font-semibold text-white">Custom SVG Maps</h3>
+                <p className="mt-1 text-sm text-white/60">
+                  Upload and navigate interactive floor plans.
+                </p>
+              </div>
+            </div>
           </div>
 
-          <div className="p-5 rounded-2xl bg-white/5 border border-white/10 flex items-center gap-3 backdrop-blur-md hover:bg-white/10 hover:shadow-lg transition-all duration-300">
-            <span className="text-green-400 text-xl flex-shrink-0">
-              <FiZap size={20} />
-            </span>
-            <span className="font-medium">Real-time path extraction</span>
+          <div className="p-5 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-md hover:bg-white/10 hover:shadow-lg transition-all duration-300">
+            <div className="flex gap-3">
+              <FiZap className="text-green-400 flex-shrink-0 mt-1" size={20} />
+
+              <div className="text-start">
+                <h3 className="font-semibold text-white">Path Extraction</h3>
+                <p className="mt-1 text-sm text-white/60">
+                  Detects routes and connections automatically.
+                </p>
+              </div>
+            </div>
           </div>
 
-          <div className="p-5 rounded-2xl bg-white/5 border border-white/10 flex items-center gap-3 backdrop-blur-md hover:bg-white/10 hover:shadow-lg transition-all duration-300">
-            <span className="text-green-400 text-xl flex-shrink-0">
-              <FiCpu size={20} />
-            </span>
-            <span className="font-medium">A* pathfinding engine</span>
+          <div className="p-5 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-md hover:bg-white/10 hover:shadow-lg transition-all duration-300">
+            <div className="flex gap-3">
+              <FiCpu className="text-green-400 flex-shrink-0 mt-1" size={20} />
+
+              <div className="text-start">
+                <h3 className="font-semibold text-white">A* Pathfinding</h3>
+                <p className="mt-1 text-sm text-white/60">
+                  Finds the shortest route in real time.
+                </p>
+              </div>
+            </div>
           </div>
         </div>
       </div>
