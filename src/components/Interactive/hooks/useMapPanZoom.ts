@@ -47,10 +47,7 @@ export function useMapPanZoom(
         Math.min(rect.width / bbox.width, rect.height / bbox.height) *
         (isMobile ? 1.2 : 1.1);
 
-      transformRef.current.scale = Math.max(
-        0.5,
-        Math.min(targetScale, 5),
-      );
+      transformRef.current.scale = Math.max(0.5, Math.min(targetScale, 5));
 
       transformRef.current.translate.x =
         (rect.width - bbox.width * transformRef.current.scale) / 2 -
@@ -117,21 +114,16 @@ export function useMapPanZoom(
       } else {
         transform.isDragging = true;
 
-        transform.dragStart.x =
-          t.clientX - transform.translate.x;
+        transform.dragStart.x = t.clientX - transform.translate.x;
 
-        transform.dragStart.y =
-          t.clientY - transform.translate.y;
+        transform.dragStart.y = t.clientY - transform.translate.y;
       }
     };
 
     const handleTouchMove = (e: TouchEvent) => {
       e.preventDefault();
 
-      if (
-        e.touches.length === 2 &&
-        transform.lastPinchDistance
-      ) {
+      if (e.touches.length === 2 && transform.lastPinchDistance) {
         const touch1 = e.touches[0];
         const touch2 = e.touches[1];
 
@@ -140,8 +132,7 @@ export function useMapPanZoom(
           touch2.clientY - touch1.clientY,
         );
 
-        const delta =
-          distance - transform.lastPinchDistance;
+        const delta = distance - transform.lastPinchDistance;
 
         const zoom = delta > 0 ? 1.05 : 0.95;
         const newScale = transform.scale * zoom;
@@ -149,21 +140,13 @@ export function useMapPanZoom(
         if (newScale >= 0.5 && newScale <= 6) {
           const rect = stage.getBoundingClientRect();
 
-          const mx =
-            (touch1.clientX + touch2.clientX) / 2 -
-            rect.left;
+          const mx = (touch1.clientX + touch2.clientX) / 2 - rect.left;
 
-          const my =
-            (touch1.clientY + touch2.clientY) / 2 -
-            rect.top;
+          const my = (touch1.clientY + touch2.clientY) / 2 - rect.top;
 
-          transform.translate.x =
-            mx -
-            (mx - transform.translate.x) * zoom;
+          transform.translate.x = mx - (mx - transform.translate.x) * zoom;
 
-          transform.translate.y =
-            my -
-            (my - transform.translate.y) * zoom;
+          transform.translate.y = my - (my - transform.translate.y) * zoom;
 
           transform.scale = newScale;
 
@@ -171,17 +154,12 @@ export function useMapPanZoom(
         }
 
         transform.lastPinchDistance = distance;
-      } else if (
-        transform.isDragging &&
-        e.touches.length === 1
-      ) {
+      } else if (transform.isDragging && e.touches.length === 1) {
         const t = e.touches[0];
 
-        const dx =
-          t.clientX - transform.lastTouch.x;
+        const dx = t.clientX - transform.lastTouch.x;
 
-        const dy =
-          t.clientY - transform.lastTouch.y;
+        const dy = t.clientY - transform.lastTouch.y;
 
         transform.translate.x += dx;
         transform.translate.y += dy;
@@ -195,8 +173,25 @@ export function useMapPanZoom(
       }
     };
 
-    const handleTouchEnd = () => {
-      transform.isDragging = false;
+    const handleTouchEnd = (e: TouchEvent) => {
+      if (e.touches.length === 1) {
+        const t = e.touches[0];
+
+        transform.isDragging = true;
+
+        transform.lastTouch = {
+          x: t.clientX,
+          y: t.clientY,
+        };
+
+        transform.dragStart = {
+          x: t.clientX - transform.translate.x,
+          y: t.clientY - transform.translate.y,
+        };
+      } else {
+        transform.isDragging = false;
+      }
+
       transform.lastPinchDistance = undefined;
     };
 
@@ -213,13 +208,9 @@ export function useMapPanZoom(
       const mouseX = e.clientX - rect.left;
       const mouseY = e.clientY - rect.top;
 
-      transform.translate.x =
-        mouseX -
-        (mouseX - transform.translate.x) * delta;
+      transform.translate.x = mouseX - (mouseX - transform.translate.x) * delta;
 
-      transform.translate.y =
-        mouseY -
-        (mouseY - transform.translate.y) * delta;
+      transform.translate.y = mouseY - (mouseY - transform.translate.y) * delta;
 
       transform.scale = newScale;
 
@@ -245,40 +236,19 @@ export function useMapPanZoom(
     });
 
     return () => {
-      stage.removeEventListener(
-        "mousedown",
-        handleMouseDown,
-      );
+      stage.removeEventListener("mousedown", handleMouseDown);
 
-      window.removeEventListener(
-        "mousemove",
-        handleMouseMove,
-      );
+      window.removeEventListener("mousemove", handleMouseMove);
 
-      window.removeEventListener(
-        "mouseup",
-        handleMouseUp,
-      );
+      window.removeEventListener("mouseup", handleMouseUp);
 
-      stage.removeEventListener(
-        "touchstart",
-        handleTouchStart,
-      );
+      stage.removeEventListener("touchstart", handleTouchStart);
 
-      stage.removeEventListener(
-        "touchmove",
-        handleTouchMove,
-      );
+      stage.removeEventListener("touchmove", handleTouchMove);
 
-      stage.removeEventListener(
-        "touchend",
-        handleTouchEnd,
-      );
+      stage.removeEventListener("touchend", handleTouchEnd);
 
-      stage.removeEventListener(
-        "wheel",
-        handleWheel,
-      );
+      stage.removeEventListener("wheel", handleWheel);
     };
   }, [applyTransform, stageRef]);
 

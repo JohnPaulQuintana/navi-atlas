@@ -95,7 +95,7 @@ export function applyNodeStyles({
       };
     }
 
-    node.onclick = async (e: MouseEvent) => {
+    node.addEventListener("pointerdown", async (e) => {
       e.stopPropagation();
 
       if (isCalculating) {
@@ -116,9 +116,7 @@ export function applyNodeStyles({
         showPopup(
           "Destination Selected",
           "info",
-          `Already navigating to ${endNode
-            .replace(/^Room_/, "")
-            .replace(/_/g, " ")}`,
+          `Already navigating to ${endNode}`,
         );
         return;
       }
@@ -144,18 +142,16 @@ export function applyNodeStyles({
           `Path discovered from ${startNode} to ${roomName}`,
         );
       } catch (error) {
-        console.error("Route calculation error:", error);
+        setEndNode(null);
 
         showPopup(
           "Route Calculation Failed",
           "error",
-          `Unable to find a path from ${startNode} to ${roomName}. Please try another destination.`,
+          `Unable to find a path from ${startNode} to ${roomName}`,
         );
-
-        setEndNode(null);
       } finally {
         setIsCalculating(false);
       }
-    };
+    });
   });
 }

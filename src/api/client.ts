@@ -1,5 +1,5 @@
-// const API = "http://localhost:5000/api/svg";
-const API = "https://svg-simulation-server.onrender.com/api/svg";
+const API = "http://localhost:5000/api/svg";
+// const API = "https://svg-simulation-server.onrender.com/api/svg";
 
 export async function wakeServer() {
   try {
