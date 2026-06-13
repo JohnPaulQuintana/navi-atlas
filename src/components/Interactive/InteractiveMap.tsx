@@ -40,7 +40,7 @@ export default function InteractiveMap({
     type: "info",
   });
 
-  const { applyTransform, applyInitialCamera, attachEvents } = useMapPanZoom(
+  const { applyInitialCamera, attachEvents } = useMapPanZoom(
     svgRef,
     stageRef,
   );
@@ -94,16 +94,20 @@ export default function InteractiveMap({
     container.innerHTML = "";
 
     const stage = document.createElement("div");
+
     stage.className =
       "w-full h-full relative rounded-md backdrop-blur-xl bg-gray-800/60 overflow-hidden";
+
     stage.style.touchAction = "none";
     stage.style.cursor = "grab";
+
     container.appendChild(stage);
     stageRef.current = stage;
 
     stage.innerHTML = data.svg;
 
     const svg = stage.querySelector("svg") as SVGSVGElement;
+
     if (!svg) {
       console.error("No SVG element found");
       return;
@@ -129,27 +133,41 @@ export default function InteractiveMap({
     stage.style.overflow = "hidden";
     stage.style.position = "relative";
 
-    setTimeout(() => applyInitialCamera(), 100);
-
-    const resizeObserver = new ResizeObserver(() => {
-      setTimeout(() => applyInitialCamera(), 50);
+    // Center only when NEW svg is loaded
+    requestAnimationFrame(() => {
+      applyInitialCamera();
     });
-    resizeObserver.observe(stage);
-    window.addEventListener("resize", () =>
-      setTimeout(applyInitialCamera, 100),
-    );
 
     const cleanupPanZoom = attachEvents();
-    // Path highlighting
-    const steps = data?.path?.debug?.steps || [];
 
-    // highlightPath(svg, steps, data?.path?.debug?.pathLine);
+    const steps = data?.path?.debug?.steps || [];
 
     createAnimatedPath(svg, steps);
 
-    // Function to apply node styles
+    animateRoute(svg, steps, animationRef);
+
+    const handleResize = () => {
+      applyInitialCamera();
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      if (animationRef.current) {
+        cancelAnimationFrame(animationRef.current);
+      }
+
+      window.removeEventListener("resize", handleResize);
+
+      cleanupPanZoom();
+    };
+  }, [data, applyInitialCamera, attachEvents]);
+
+  useEffect(() => {
+    if (!svgRef.current) return;
+
     applyNodeStyles({
-      svg,
+      svg: svgRef.current,
       startNode,
       endNode,
       filename,
@@ -159,47 +177,7 @@ export default function InteractiveMap({
       setIsCalculating,
       showPopup,
     });
-
-    // Watch for endNode changes to reapply styles
-    const interval = setInterval(() => {
-      if (endNode) {
-        applyNodeStyles({
-          svg,
-          startNode,
-          endNode,
-          filename,
-          isCalculating,
-          onUpdatePath,
-          setEndNode,
-          setIsCalculating,
-          showPopup,
-        });
-
-        clearInterval(interval);
-      }
-    }, 100);
-
-    // Path animation
-    animateRoute(svg, steps, animationRef);
-
-    return () => {
-      if (animationRef.current) {
-        cancelAnimationFrame(animationRef.current);
-      }
-      clearInterval(interval);
-      resizeObserver.disconnect();
-      cleanupPanZoom();
-    };
-  }, [
-    data,
-    startNode,
-    endNode,
-    onUpdatePath,
-    applyInitialCamera,
-    applyTransform,
-    isCalculating,
-  ]);
-
+  }, [startNode, endNode, isCalculating, filename, onUpdatePath]);
   return (
     <div className="mt-20">
       {/* HERO HEADER */}
