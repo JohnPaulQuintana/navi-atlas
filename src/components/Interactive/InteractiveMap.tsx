@@ -6,6 +6,8 @@ import { useMapPanZoom } from "./hooks/useMapPanZoom";
 import { createAnimatedPath } from "./utils/createAnimatedPath";
 import { animateRoute } from "./utils/animateRoute";
 import { applyNodeStyles } from "./utils/applyNodeStyles";
+import MallScene from "./three/MallScene";
+// import RoomMesh from "./three/RoomMesh";
 interface InteractiveMapProps {
   data: any;
   filename?: string;
@@ -40,10 +42,7 @@ export default function InteractiveMap({
     type: "info",
   });
 
-  const { applyInitialCamera, attachEvents } = useMapPanZoom(
-    svgRef,
-    stageRef,
-  );
+  const { applyInitialCamera, attachEvents } = useMapPanZoom(svgRef, stageRef);
 
   const showPopup = (
     message: string,
@@ -178,6 +177,48 @@ export default function InteractiveMap({
       showPopup,
     });
   }, [startNode, endNode, isCalculating, filename, onUpdatePath]);
+
+  const rooms = Object.values(data?.roomNodes || {});
+  const steps = data?.path?.debug?.steps || [];
+  // console.log(steps);
+
+  const handleRoomClick = async (room: any) => {
+    if (isCalculating) return;
+
+    if (room.id === startNode) {
+      showPopup("Current Location", "info", `You are already at ${startNode}`);
+      return;
+    }
+
+    try {
+      setIsCalculating(true);
+
+      showPopup(
+        "Calculating Route",
+        "loading",
+        `Finding route to ${room.id}...`,
+      );
+
+      setEndNode(room.id);
+
+      await onUpdatePath(filename, startNode, room.id);
+
+      showPopup("Route Found", "success", `Navigating to ${room.id}`);
+    } catch (err) {
+      console.error(err);
+
+      showPopup(
+        "Navigation Failed",
+        "error",
+        `Unable to navigate to ${room.id}`,
+      );
+
+      setEndNode(null);
+    } finally {
+      setIsCalculating(false);
+    }
+  };
+
   return (
     <div className="mt-20">
       {/* HERO HEADER */}
@@ -185,14 +226,18 @@ export default function InteractiveMap({
       {/* Centered Glassmorphism Popup with Overlay */}
       <MapPopup popup={popup} hidePopup={hidePopup} />
 
-      <div
+      <div className="w-full h-[80vh]">
+        <MallScene rooms={rooms} steps={steps} onRoomClick={handleRoomClick} selectedRoom={endNode} />
+      </div>
+
+      {/* <div
         ref={containerRef}
         className="w-full h-[70vh] rounded-md"
         style={{
           position: "relative",
           overflow: "hidden",
         }}
-      />
+      /> */}
     </div>
   );
 }
