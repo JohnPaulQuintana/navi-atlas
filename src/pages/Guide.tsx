@@ -7,7 +7,7 @@ import {
   FiPlayCircle,
   FiChevronDown,
   FiChevronUp,
-  FiInfo,
+  // FiInfo,
   FiAlertCircle,
   FiThumbsUp,
   FiThumbsDown,
