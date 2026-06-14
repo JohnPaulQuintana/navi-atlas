@@ -66,7 +66,11 @@ export default function RoomMesh({
           <mesh rotation={[-Math.PI / 2, 0, 0]}>
             <planeGeometry args={[Math.max(room.width * 0.7, 140), 40]} />
 
-            <meshBasicMaterial color="#ffffff" transparent opacity={0.85} />
+            <meshStandardMaterial
+              color="#10b981"
+              emissive="#10b981"
+              emissiveIntensity={0.3}
+            />
           </mesh>
 
           <Text
