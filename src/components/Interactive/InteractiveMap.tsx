@@ -183,8 +183,14 @@ export default function InteractiveMap({
   const handleRoomClick = async (room: any) => {
     if (isCalculating) return;
 
+    const roomName = room.id.replace(/^Room_/, "").replace(/_/g, " ");
+
     if (room.id === startNode) {
-      showPopup("Current Location", "info", `You are already at ${startNode}`);
+      showPopup(
+        "Current Location",
+        "info",
+        `${roomName} is your current location. Select another destination to begin navigation.`,
+      );
       return;
     }
 
@@ -192,23 +198,27 @@ export default function InteractiveMap({
       setIsCalculating(true);
 
       showPopup(
-        "Calculating Route",
+        "Generating Route",
         "loading",
-        `Finding route to ${room.id}...`,
+        `Analyzing walkable paths and preparing navigation to ${roomName}.`,
       );
 
       setEndNode(room.id);
 
       await onUpdatePath(filename, startNode, room.id);
 
-      showPopup("Route Found", "success", `Navigating to ${room.id}`);
+      showPopup(
+        "Navigation Ready",
+        "success",
+        `The optimal route to ${roomName} is now available.`,
+      );
     } catch (err) {
-      console.error(err);
+      console.error("Navigation error:", err);
 
       showPopup(
-        "Navigation Failed",
+        "Route Unavailable",
         "error",
-        `Unable to navigate to ${room.id}`,
+        `NaviAtlas was unable to generate a route to ${roomName}. Please select another destination and try again.`,
       );
 
       setEndNode(null);
@@ -225,7 +235,12 @@ export default function InteractiveMap({
       <MapPopup popup={popup} hidePopup={hidePopup} />
 
       <div className="w-full h-[80vh]">
-        <MallScene rooms={rooms} steps={steps} onRoomClick={handleRoomClick} selectedRoom={endNode} />
+        <MallScene
+          rooms={rooms}
+          steps={steps}
+          onRoomClick={handleRoomClick}
+          selectedRoom={endNode}
+        />
       </div>
 
       {/* <div

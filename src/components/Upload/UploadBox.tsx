@@ -152,6 +152,8 @@ export default function UploadBox({
           sleep, so the first visit may take a minute or two.
         </div>
       )}
+      {/* Error */}
+      {error && <p className="text-red-500 font-semibold">{error}</p>}
 
       {/* Upload Button */}
       <button
@@ -176,8 +178,7 @@ export default function UploadBox({
       {/* Loader Message */}
       <LoaderMessages message={currentMessage} />
 
-      {/* Error */}
-      {error && <p className="text-red-500 font-semibold">{error}</p>}
+      
     </div>
   );
 }

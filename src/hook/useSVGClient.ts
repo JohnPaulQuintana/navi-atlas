@@ -10,7 +10,7 @@ interface UseSVGUploadReturn {
   mapData: any | null;
   startUpload: (file: File, onComplete?: (data: any) => void) => void;
   reset: () => void;
-  updatePath: (svgName: string, start: string, end: string) => Promise<void>
+  updatePath: (svgName: string, start: string, end: string) => Promise<void>;
   svgName: string | null;
 }
 
@@ -21,7 +21,7 @@ export function useSVGUpload(): UseSVGUploadReturn {
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
   const [mapData, setMapData] = useState<any | null>(null);
-  const [svgName, setSvgName] = useState<string | null>(null)
+  const [svgName, setSvgName] = useState<string | null>(null);
   const loaderMessages = [
     "Uploading SVG...",
     "Validating structure...",
@@ -76,7 +76,7 @@ export function useSVGUpload(): UseSVGUploadReturn {
       }
 
       const filename = uploadResult.data?.filename;
-      setSvgName(filename)
+      setSvgName(filename);
       // ===============================
       // STEP 3: PATH GENERATION
       // ===============================
@@ -104,7 +104,10 @@ export function useSVGUpload(): UseSVGUploadReturn {
         setUploading(false);
       }, 800);
     } catch (err: any) {
-      setError(err.message || "Upload failed");
+      console.error(err);
+
+      setError(err.message || "Unexpected error");
+
       setUploading(false);
       setProgress(0);
       setCurrentMessage(null);
@@ -140,6 +143,6 @@ export function useSVGUpload(): UseSVGUploadReturn {
     startUpload,
     reset,
     updatePath,
-    svgName
+    svgName,
   };
 }
