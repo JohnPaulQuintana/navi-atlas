@@ -2,6 +2,7 @@ import CodeExample from "../components/Interactive/components/docs/CodeExample";
 import ResponseExample from "../components/Interactive/components/docs/ResponseExample";
 import sampleSVG from "../assets/maps/GROUND.svg";
 import sample3D from "../assets/maps/r1.PNG";
+import { useState } from "react";
 
 type Language = "curl" | "javascript" | "python" | "php" | "csharp";
 
@@ -166,6 +167,8 @@ var content =
     await response.Content.ReadAsStringAsync();`,
   };
 
+  const [previewImage, setPreviewImage] = useState<string | null>(null);
+
   return (
     <div className="w-full min-h-screen pt-28 px-6 text-white">
       <div className="max-w-5xl mx-auto">
@@ -190,21 +193,37 @@ var content =
           </p>
 
           <div className="grid lg:grid-cols-2 gap-6">
-            <div>
-              <h3 className="font-semibold text-green-400 mb-3">SVG Input</h3>
+            <div
+              className="relative group cursor-pointer overflow-hidden rounded-xl border border-white/10"
+              onClick={() => setPreviewImage(sampleSVG)}
+            >
+              <img
+                src={sampleSVG}
+                alt="SVG Map"
+                className="w-full transition duration-300 group-hover:scale-105"
+              />
 
-              <div className="rounded-xl overflow-hidden border border-white/10 bg-black/20">
-                <img src={sampleSVG} alt="SVG Map" className="w-full" />
+              <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition flex items-center justify-center">
+                <span className="px-4 py-2 rounded-lg bg-white/10 backdrop-blur text-white font-medium">
+                  Preview
+                </span>
               </div>
             </div>
 
-            <div>
-              <h3 className="font-semibold text-green-400 mb-3">
-                Generated 3D Map
-              </h3>
+            <div
+              className="relative group cursor-pointer overflow-hidden rounded-xl border border-white/10"
+              onClick={() => setPreviewImage(sample3D)}
+            >
+              <img
+                src={sample3D}
+                alt="3D Map"
+                className="w-full transition duration-300 group-hover:scale-105"
+              />
 
-              <div className="rounded-xl overflow-hidden border border-white/10 bg-black/20">
-                <img src={sample3D} alt="3D Map" className="w-full" />
+              <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition flex items-center justify-center">
+                <span className="px-4 py-2 rounded-lg bg-white/10 backdrop-blur text-white font-medium">
+                  Preview
+                </span>
               </div>
             </div>
           </div>
@@ -356,7 +375,9 @@ var content =
 }`}
           </pre>
 
-          <h3 className="font-semibold mb-3 text-green-400">Initial Map Load</h3>
+          <h3 className="font-semibold mb-3 text-green-400">
+            Initial Map Load
+          </h3>
 
           <p className="text-white/60 text-sm mb-3">
             Load SVG data and initialize the map.
@@ -369,7 +390,9 @@ var content =
 }`}
           </pre>
 
-          <h3 className="font-semibold mb-3 text-green-400">Navigation Request</h3>
+          <h3 className="font-semibold mb-3 text-green-400">
+            Navigation Request
+          </h3>
 
           <p className="text-white/60 text-sm mb-3">
             Generate a route after the user selects a destination room.
@@ -532,6 +555,27 @@ var content =
           </div>
         </section>
       </div>
+
+      {previewImage && (
+        <div
+          className="fixed inset-0 z-[9999] bg-black/90 flex items-center justify-center p-6"
+          onClick={() => setPreviewImage(null)}
+        >
+          <img
+            src={previewImage}
+            alt="Preview"
+            className="max-w-[95vw] max-h-[90vh] object-contain rounded-xl"
+            onClick={(e) => e.stopPropagation()}
+          />
+
+          <button
+            className="absolute top-6 right-6 w-10 h-10 rounded-full bg-white/10 text-white text-xl"
+            onClick={() => setPreviewImage(null)}
+          >
+            ×
+          </button>
+        </div>
+      )}
     </div>
   );
 }
