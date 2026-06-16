@@ -11,18 +11,22 @@ export default function Header() {
   return (
     <header className="fixed top-0 left-0 w-full z-50">
       <div className="w-full px-4 md:px-0 py-3 md:py-0">
-        <div className="
+        <div
+          className="
           flex items-center justify-between
           bg-white/10 backdrop-blur-xl border border-white/20 
           shadow-lg px-6 py-3
           rounded-2xl md:rounded-none
-        ">
+        "
+        >
           {/* Logo */}
           <NavLink to="/" className="flex items-center gap-2">
             <span className="p-2 rounded-xl bg-green-500/20 text-green-500">
               <FiMap size={18} />
             </span>
-            <span className="text-white font-semibold tracking-wide">NaviAtlas</span>
+            <span className="text-white font-semibold tracking-wide">
+              NaviAtlas
+            </span>
           </NavLink>
 
           {/* Desktop Nav */}
@@ -35,6 +39,9 @@ export default function Header() {
             </NavLink>
             <NavLink to="/guide" className={linkClass}>
               Guide
+            </NavLink>
+            <NavLink to="/documentation" className={linkClass}>
+              Documentation
             </NavLink>
           </nav>
 
@@ -56,18 +63,35 @@ export default function Header() {
         {open && (
           <div className="md:hidden mt-2 bg-black/40 backdrop-blur-xl border border-white/10 rounded-xl p-4">
             <nav className="flex flex-col gap-4 text-sm">
-              <NavLink to="/" onClick={() => setOpen(false)} className={linkClass}>
+              <NavLink
+                to="/"
+                onClick={() => setOpen(false)}
+                className={linkClass}
+              >
                 Home
               </NavLink>
-              <NavLink to="/upload" onClick={() => setOpen(false)} className={linkClass}>
+              <NavLink
+                to="/upload"
+                onClick={() => setOpen(false)}
+                className={linkClass}
+              >
                 Upload SVG
               </NavLink>
-              <NavLink to="/guide" onClick={() => setOpen(false)} className={linkClass}>
+              <NavLink
+                to="/guide"
+                onClick={() => setOpen(false)}
+                className={linkClass}
+              >
                 Guide
               </NavLink>
-
+              <NavLink to="/documentation" onClick={() => setOpen(false)} className={linkClass}>
+                Documentation
+              </NavLink>
               {/* CTA button mobile */}
-              <button className="mt-2 px-4 py-2 rounded-xl bg-green-500 text-white font-medium hover:bg-green-400 transition" onClick={() => setOpen(false)}>
+              <button
+                className="mt-2 px-4 py-2 rounded-xl bg-green-500 text-white font-medium hover:bg-green-400 transition"
+                onClick={() => setOpen(false)}
+              >
                 Get Started
               </button>
             </nav>

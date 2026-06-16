@@ -115,7 +115,7 @@ export default function Footer() {
       </div>
 
       {/* DEVELOPER + VERSION BAR */}
-      <div className="border-t border-white/10 px-6 py-4 flex flex-col md:flex-row items-center justify-between text-xs text-white/50 gap-3">
+      <div className="border-t border-white/10 px-28 py-4 flex flex-col md:flex-row items-center justify-between text-xs text-white/50 gap-3">
         {/* DEVELOPER */}
         <div className="flex items-center gap-2">
           <span className="text-green-400">

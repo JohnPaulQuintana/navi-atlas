@@ -5,6 +5,7 @@ import { Routes, Route } from "react-router-dom";
 import UploadSVG from "./pages/UploadSVG";
 import ViewGuide from "./pages/Guide";
 import Footer from "./components/Footer";
+import Documentation from "./pages/Documentation";
 
 function App() {
   return (
@@ -35,6 +36,7 @@ function App() {
             <Route path="/" element={<Hero />} />
             <Route path="/upload" element={<UploadSVG />} />
             <Route path="/guide" element={<ViewGuide />} />
+            <Route path="/documentation" element={<Documentation />} />
           </Routes>
         </main>
       </div>
