@@ -78,7 +78,11 @@ export default function RoomMesh({
 
   function getRoomIcon(roomId: string) {
     const id = roomId.toLowerCase();
+    console.log(id)
 
+    // court
+    if (id.includes("court")) return "⚽"
+    
     // Access
     if (id.includes("entrance")) return "🚪";
     if (id.includes("exit")) return "🚶";
@@ -101,7 +105,7 @@ export default function RoomMesh({
     if (id.includes("pwd")) return "♿";
 
     // Food
-    if (id.includes("food")) return "🍔";
+    if (id.includes("canteen")) return "🥘";
     if (id.includes("restaurant")) return "🍽️";
     if (id.includes("cafe")) return "☕";
     if (id.includes("coffee")) return "☕";
