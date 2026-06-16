@@ -9,8 +9,8 @@ export default function Walker(props: any) {
   const mixer = useMemo(() => new THREE.AnimationMixer(model), [model]);
 
   useEffect(() => {
-    console.log("MODEL", model);
-    console.log("ANIMATIONS", model.animations);
+    // console.log("MODEL", model);
+    // console.log("ANIMATIONS", model.animations);
 
     if (model.animations?.length) {
       const action = mixer.clipAction(model.animations[0]);

@@ -170,7 +170,7 @@ export default function RouteLine({ steps }: { steps: any[] }) {
           rotation={[-Math.PI / 2, 0, 0]}
           renderOrder={10002}
         >
-          <ringGeometry args={[12, 18, 32]} />
+          {/* <ringGeometry args={[12, 18, 32]} /> */}
 
           <meshBasicMaterial
             color="#22c55e"
