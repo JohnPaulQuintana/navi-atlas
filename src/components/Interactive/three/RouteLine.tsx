@@ -1,23 +1,25 @@
-import { Line } from "@react-three/drei";
+// import { Line } from "@react-three/drei";
 import { useMemo, useRef } from "react";
 import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
 import Walker from "./Walker";
 
 export default function RouteLine({ steps }: { steps: any[] }) {
+  const ROUTE_HEIGHT = 3;
+
   const points = useMemo(
     () =>
       steps
         .filter((s) => s.x != null && s.y != null)
-        .map((s) => [s.x, 5, s.y] as [number, number, number]),
+        .map((s) => [s.x, ROUTE_HEIGHT, s.y] as [number, number, number]),
     [steps],
   );
 
   const walkerRef = useRef<THREE.Group>(null);
+  const distanceRef = useRef(0);
 
   const segments = useMemo(() => {
     let total = 0;
-
     const segs = [];
 
     for (let i = 0; i < points.length - 1; i++) {
@@ -45,10 +47,10 @@ export default function RouteLine({ steps }: { steps: any[] }) {
     };
   }, [points]);
 
-  const distanceRef = useRef(0);
-
   useFrame((_, delta) => {
-    if (!walkerRef.current) return;
+    if (!walkerRef.current || segments.totalLength === 0) {
+      return;
+    }
 
     const WALK_SPEED = 120;
 
@@ -68,9 +70,7 @@ export default function RouteLine({ steps }: { steps: any[] }) {
 
     if (!segment) return;
 
-    const localDistance = currentDistance - segment.accumulated;
-
-    const t = localDistance / segment.length;
+    const t = (currentDistance - segment.accumulated) / segment.length;
 
     const x = segment.start[0] + (segment.end[0] - segment.start[0]) * t;
 
@@ -78,7 +78,7 @@ export default function RouteLine({ steps }: { steps: any[] }) {
 
     const z = segment.start[2] + (segment.end[2] - segment.start[2]) * t;
 
-    walkerRef.current.position.set(x, y, z);
+    walkerRef.current.position.set(x, y + 4, z);
 
     const angle = Math.atan2(
       segment.end[2] - segment.start[2],
@@ -88,39 +88,84 @@ export default function RouteLine({ steps }: { steps: any[] }) {
     walkerRef.current.rotation.y = -angle + Math.PI / 2;
   });
 
-  if (points.length < 2) return null;
+  if (points.length < 2) {
+    return null;
+  }
 
   return (
     <>
-      <Line
-        points={points}
-        color="#34d399"
-        lineWidth={14}
-        transparent
-        opacity={0.2}
-      />
+      {/* Route Segments */}
+      {segments.segments.map((segment, index) => {
+        const dx = segment.end[0] - segment.start[0];
 
-      <Line points={points} color="#10b981" lineWidth={6} />
+        const dz = segment.end[2] - segment.start[2];
 
-      <group ref={walkerRef}>
-        <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 1, 0]}>
+        const length = Math.sqrt(dx * dx + dz * dz) + 10; // overlap
+
+        const centerX = (segment.start[0] + segment.end[0]) / 2;
+
+        const centerZ = (segment.start[2] + segment.end[2]) / 2;
+
+        const rotationY = Math.atan2(dx, dz);
+
+        return (
+          <mesh
+            key={`segment-${index}`}
+            position={[centerX, ROUTE_HEIGHT, centerZ]}
+            rotation={[0, rotationY, 0]}
+            renderOrder={9999}
+          >
+            <boxGeometry
+              args={[
+                18, // width
+                0.8, // thickness
+                length,
+              ]}
+            />
+
+            <meshBasicMaterial
+              color="#10b981"
+              depthTest={false}
+              depthWrite={false}
+            />
+          </mesh>
+        );
+      })}
+
+      {/* Route Joints */}
+      {points.map((point, index) => (
+        <mesh
+          key={`joint-${index}`}
+          position={[point[0], ROUTE_HEIGHT, point[2]]}
+          rotation={[Math.PI / 2, 0, 0]}
+          renderOrder={10000}
+        >
+          <circleGeometry args={[9, 24]} />
+
+          <meshBasicMaterial
+            color="#10b981"
+            depthTest={false}
+            depthWrite={false}
+          />
+        </mesh>
+      ))}
+
+      {/* Walker */}
+      <group ref={walkerRef} renderOrder={10001}>
+        <mesh
+          position={[0, 1, 0]}
+          rotation={[-Math.PI / 2, 0, 0]}
+          renderOrder={10002}
+        >
           <ringGeometry args={[12, 18, 32]} />
 
-          <meshBasicMaterial color="#22c55e" side={THREE.DoubleSide} />
+          <meshBasicMaterial
+            color="#22c55e"
+            side={THREE.DoubleSide}
+            depthTest={false}
+            depthWrite={false}
+          />
         </mesh>
-
-        {/* Walker Name */}
-        {/* <Text
-          position={[0, 120, 0]}
-          fontSize={20}
-          color="#ffffff"
-          anchorX="center"
-          anchorY="middle"
-          outlineWidth={1}
-          outlineColor="#111827"
-        >
-          Hello
-        </Text> */}
 
         <Walker position={[0, 0, 0]} />
       </group>

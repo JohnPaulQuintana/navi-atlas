@@ -4,7 +4,7 @@ export default function HallwaysMesh({
   walkables: any[];
 }) {
   const HALLWAY_WIDTH = 50;
-  const HALLWAY_THICKNESS = 1;
+  const HALLWAY_THICKNESS = 0.5;
 
   return (
     <>
@@ -32,7 +32,7 @@ export default function HallwaysMesh({
             key={index}
             position={[
               centerX,
-              0.6,
+              2,
               centerZ,
             ]}
             rotation={[
@@ -41,6 +41,7 @@ export default function HallwaysMesh({
               0,
             ]}
             receiveShadow
+            renderOrder={1}
           >
             <boxGeometry
               args={[
@@ -54,6 +55,9 @@ export default function HallwaysMesh({
               color="#FFF0E4"
               roughness={1}
               metalness={0}
+              polygonOffset
+              polygonOffsetFactor={-2}
+              polygonOffsetUnits={-2}
             />
           </mesh>
         );

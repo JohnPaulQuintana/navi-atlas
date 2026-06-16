@@ -25,8 +25,8 @@ export default function MallScene({
       camera={{
         position: [600, 2200, 1600],
         fov: 35,
-        near: 0.1,
-        far: 20000,
+        near: 10,
+        far: 5000,
       }}
     >
       {/* Lighting */}
