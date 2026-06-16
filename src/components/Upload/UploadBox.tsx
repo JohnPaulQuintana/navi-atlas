@@ -172,13 +172,12 @@ export default function UploadBox({
             : "Process SVG"}
       </button>
 
-      {/* Progress */}
-      {uploading && <ProgressBar progress={progress} />}
-
-      {/* Loader Message */}
-      <LoaderMessages message={currentMessage} />
-
-      
+      {uploading && !error && (
+        <>
+          <ProgressBar progress={progress} />
+          <LoaderMessages message={currentMessage} />
+        </>
+      )}
     </div>
   );
 }

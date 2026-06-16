@@ -15,17 +15,21 @@ export default function Header() {
           className="
           flex items-center justify-between
           bg-white/10 backdrop-blur-xl border border-white/20 
-          shadow-lg px-6 py-3
+          shadow-lg px-8 xl:px-36 py-3
           rounded-2xl md:rounded-none
         "
         >
-          {/* Logo */}
-          <NavLink to="/" className="flex items-center gap-2">
-            <span className="p-2 rounded-xl bg-green-500/20 text-green-500">
-              <FiMap size={18} />
-            </span>
-            <span className="text-white font-semibold tracking-wide">
-              NaviAtlas
+          <NavLink to="/" className="flex items-center gap-3">
+            <div className="w-10 h-10 flex items-center justify-center rounded-xl bg-green-500/10 border border-green-500/20">
+              <img
+                src="/logo-light.png"
+                alt="NaviAtlas Logo"
+                className="w-10 h-10 object-cover"
+              />
+            </div>
+
+            <span className="text-white font-semibold tracking-wide text-lg">
+              <span className="text-green-500 font-extrabold">Navi</span>Atlas
             </span>
           </NavLink>
 
@@ -46,8 +50,16 @@ export default function Header() {
           </nav>
 
           {/* CTA Button (desktop only) */}
-          <button className="hidden md:block px-4 py-2 rounded-xl bg-green-500 text-white font-medium hover:bg-green-400 transition shadow-md">
-            Get Started
+          <button
+            onClick={() =>
+              window.open(
+                "https://mail.google.com/mail/?view=cm&fs=1&to=jpquintana01@gmail.com&su=NaviAtlas%20Inquiry",
+                "_blank",
+              )
+            }
+            className="hidden md:block px-4 py-2 rounded-xl bg-green-500 text-white font-medium hover:bg-green-400 transition shadow-md"
+          >
+            Contact Me
           </button>
 
           {/* Hamburger (mobile only) */}
@@ -84,7 +96,11 @@ export default function Header() {
               >
                 Guide
               </NavLink>
-              <NavLink to="/documentation" onClick={() => setOpen(false)} className={linkClass}>
+              <NavLink
+                to="/documentation"
+                onClick={() => setOpen(false)}
+                className={linkClass}
+              >
                 Documentation
               </NavLink>
               {/* CTA button mobile */}

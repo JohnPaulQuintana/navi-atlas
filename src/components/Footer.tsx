@@ -14,10 +14,23 @@ export default function Footer() {
       {/* MAIN FOOTER CONTENT */}
       <div className="max-w-6xl mx-auto px-6 py-12 grid grid-cols-1 md:grid-cols-3 gap-8">
         {/* ABOUT */}
-        <div className="space-y-2">
-          <h3 className="text-lg font-semibold text-green-400">
-            Interactive Maps
-          </h3>
+        <div className="space-y-4">
+          <div className="flex items-center gap-4">
+            <img
+              src="/logo-light.png"
+              alt="NaviAtlas Logo"
+              className="w-20 h-20 object-contain flex-shrink-0"
+            />
+
+            <div>
+              <h3 className="text-2xl font-bold text-white">NaviAtlas</h3>
+
+              <p className="text-green-400 text-sm">
+                SVG Indoor Navigation Platform
+              </p>
+            </div>
+          </div>
+
           <p className="text-white/70 text-sm">
             Build, explore, and manage your SVG maps with ease. Learn to
             structure your SVGs correctly in Figma and visualize routes
