@@ -138,8 +138,8 @@ export default function RouteLine({ steps }: { steps: any[] }) {
 
             <meshBasicMaterial
               color="#10b981"
-              depthTest={false}
-              depthWrite={false}
+              // depthTest={false}
+              // depthWrite={false}
             />
           </mesh>
         );
