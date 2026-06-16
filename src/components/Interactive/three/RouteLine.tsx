@@ -3,6 +3,7 @@ import { useMemo, useRef } from "react";
 import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
 import Walker from "./Walker";
+import { useEffect } from "react";
 
 export default function RouteLine({ steps }: { steps: any[] }) {
   const ROUTE_HEIGHT = 3;
@@ -17,6 +18,18 @@ export default function RouteLine({ steps }: { steps: any[] }) {
 
   const walkerRef = useRef<THREE.Group>(null);
   const distanceRef = useRef(0);
+
+  useEffect(() => {
+    if (!walkerRef.current || points.length === 0) {
+      return;
+    }
+
+    distanceRef.current = 0;
+
+    const start = points[0];
+
+    walkerRef.current.position.set(start[0], start[1] + 4, start[2]);
+  }, [points]);
 
   const segments = useMemo(() => {
     let total = 0;
