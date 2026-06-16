@@ -49,7 +49,6 @@ export default function Header() {
             </NavLink>
           </nav>
 
-          {/* CTA Button (desktop only) */}
           <button
             onClick={() =>
               window.open(
@@ -57,7 +56,7 @@ export default function Header() {
                 "_blank",
               )
             }
-            className="hidden md:block px-4 py-2 rounded-xl bg-green-500 text-white font-medium hover:bg-green-400 transition shadow-md"
+            className="hidden md:flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white/5 backdrop-blur-md border border-white/10 text-white hover:border-green-500/30 hover:text-green-400 transition"
           >
             Contact Me
           </button>
@@ -105,10 +104,15 @@ export default function Header() {
               </NavLink>
               {/* CTA button mobile */}
               <button
-                className="mt-2 px-4 py-2 rounded-xl bg-green-500 text-white font-medium hover:bg-green-400 transition"
-                onClick={() => setOpen(false)}
+                onClick={() =>
+                  window.open(
+                    "https://mail.google.com/mail/?view=cm&fs=1&to=jpquintana01@gmail.com&su=NaviAtlas%20Inquiry",
+                    "_blank",
+                  )
+                }
+                className="items-center gap-2 px-5 py-2.5 rounded-xl bg-white/5 backdrop-blur-md border border-white/10 text-white hover:border-green-500/30 hover:text-green-400 transition"
               >
-                Get Started
+                Contact Me
               </button>
             </nav>
           </div>
