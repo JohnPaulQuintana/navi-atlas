@@ -177,6 +177,7 @@ export default function InteractiveMap({
   }, [startNode, endNode, isCalculating, filename, onUpdatePath]);
 
   const rooms = Object.values(data?.roomNodes || {});
+  const walkable = Object.values(data?.walkable || {});
   const steps = data?.path?.debug?.steps || [];
   // console.log(steps);
 
@@ -234,9 +235,10 @@ export default function InteractiveMap({
       {/* Centered Glassmorphism Popup with Overlay */}
       <MapPopup popup={popup} hidePopup={hidePopup} />
 
-      <div className="w-full h-[80vh]">
+      <div className="w-full h-[90vh]">
         <MallScene
           rooms={rooms}
+          walkables={walkable}
           steps={steps}
           onRoomClick={handleRoomClick}
           selectedRoom={endNode}

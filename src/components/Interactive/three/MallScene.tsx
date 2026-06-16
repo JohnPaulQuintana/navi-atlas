@@ -1,11 +1,13 @@
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls, Grid } from "@react-three/drei";
 import RoomMesh from "./RoomMesh";
+import HallwaysMesh from "./HallwaysMesh";
 // import * as THREE from "three";
 import RouteLine from "./RouteLine";
 
 interface MallSceneProps {
   rooms: any[];
+  walkables: any[];
   steps: any[];
   selectedRoom?: string | null;
   onRoomClick?: (room: any) => void;
@@ -13,6 +15,7 @@ interface MallSceneProps {
 
 export default function MallScene({
   rooms,
+  walkables,
   steps,
   onRoomClick,
   selectedRoom,
@@ -56,6 +59,8 @@ export default function MallScene({
         fadeStrength={0}
         infiniteGrid={false}
       />
+
+      <HallwaysMesh walkables={walkables} />
 
       {/* Rooms */}
       {rooms
