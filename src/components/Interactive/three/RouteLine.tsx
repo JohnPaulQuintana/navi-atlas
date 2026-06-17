@@ -5,18 +5,30 @@ import * as THREE from "three";
 import Walker from "./Walker";
 import { useEffect } from "react";
 
-export default function RouteLine({ steps }: { steps: any[] }) {
+export default function RouteLine({
+  steps,
+  walkerRef,
+  streetView,
+}: {
+  steps: any[];
+  walkerRef: React.RefObject<THREE.Group | null>;
+  streetView?: boolean;
+}) {
+  // const { camera } = useThree();
+
   const ROUTE_HEIGHT = 3;
 
-  const points = useMemo(
-    () =>
-      steps
-        .filter((s) => s.x != null && s.y != null)
-        .map((s) => [s.x, ROUTE_HEIGHT, s.y] as [number, number, number]),
-    [steps],
-  );
+  const points = useMemo(() => {
+    const filtered = steps.filter(
+      (s) => s.x != null && s.y != null && s.type !== "ROOM",
+    );
 
-  const walkerRef = useRef<THREE.Group>(null);
+    return filtered.map(
+      (s) => [s.x, ROUTE_HEIGHT, s.y] as [number, number, number],
+    );
+  }, [steps]);
+
+  // const walkerRef = useRef<THREE.Group>(null);
   const distanceRef = useRef(0);
 
   useEffect(() => {
@@ -101,86 +113,41 @@ export default function RouteLine({ steps }: { steps: any[] }) {
     walkerRef.current.rotation.y = -angle + Math.PI / 2;
   });
 
+  const routeGeometry = useMemo(() => {
+    if (points.length < 2) return null;
+
+    const curve = new THREE.CatmullRomCurve3(
+      points.map(([x, y, z]) => new THREE.Vector3(x, y, z)),
+      false,
+      "catmullrom",
+      0.1,
+    );
+
+    return new THREE.TubeGeometry(
+      curve,
+      points.length * 25,
+      8, // thickness
+      24,
+      false,
+    );
+  }, [points]);
+
   if (points.length < 2) {
     return null;
   }
 
   return (
     <>
-      {/* Route Segments */}
-      {segments.segments.map((segment, index) => {
-        const dx = segment.end[0] - segment.start[0];
-
-        const dz = segment.end[2] - segment.start[2];
-
-        const length = Math.sqrt(dx * dx + dz * dz) + 10; // overlap
-
-        const centerX = (segment.start[0] + segment.end[0]) / 2;
-
-        const centerZ = (segment.start[2] + segment.end[2]) / 2;
-
-        const rotationY = Math.atan2(dx, dz);
-
-        return (
-          <mesh
-            key={`segment-${index}`}
-            position={[centerX, ROUTE_HEIGHT, centerZ]}
-            rotation={[0, rotationY, 0]}
-            renderOrder={9999}
-          >
-            <boxGeometry
-              args={[
-                18, // width
-                0.8, // thickness
-                length,
-              ]}
-            />
-
-            <meshBasicMaterial
-              color="#10b981"
-              // depthTest={false}
-              // depthWrite={false}
-            />
-          </mesh>
-        );
-      })}
-
-      {/* Route Joints */}
-      {points.map((point, index) => (
-        <mesh
-          key={`joint-${index}`}
-          position={[point[0], ROUTE_HEIGHT, point[2]]}
-          rotation={[Math.PI / 2, 0, 0]}
-          renderOrder={10000}
-        >
-          <circleGeometry args={[9, 24]} />
-
-          <meshBasicMaterial
-            color="#10b981"
-            depthTest={false}
-            depthWrite={false}
-          />
+      {/* Smooth Route */}
+      {routeGeometry && (
+        <mesh geometry={routeGeometry} renderOrder={9999}>
+          <meshBasicMaterial color="#10b981" />
         </mesh>
-      ))}
+      )}
 
       {/* Walker */}
-      <group ref={walkerRef} renderOrder={10001}>
-        <mesh
-          position={[0, 1, 0]}
-          rotation={[-Math.PI / 2, 0, 0]}
-          renderOrder={10002}
-        >
-          {/* <ringGeometry args={[12, 18, 32]} /> */}
-
-          <meshBasicMaterial
-            color="#22c55e"
-            side={THREE.DoubleSide}
-            depthTest={false}
-            depthWrite={false}
-          />
-        </mesh>
-
-        <Walker position={[0, 0, 0]} />
+      <group ref={walkerRef}>
+        {!streetView && <Walker position={[0, 0, 0]} />}
       </group>
     </>
   );
