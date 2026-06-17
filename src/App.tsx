@@ -6,8 +6,11 @@ import UploadSVG from "./pages/UploadSVG";
 import ViewGuide from "./pages/Guide";
 import Footer from "./components/Footer";
 import Documentation from "./pages/Documentation";
+import useAnalytics from "./hook/analytics/useAnalytics";
 
 function App() {
+  useAnalytics();
+
   return (
     <div className="relative min-h-screen flex flex-col bg-[#050805] overflow-hidden">
       {/* Grid Background */}

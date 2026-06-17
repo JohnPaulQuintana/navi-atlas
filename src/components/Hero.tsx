@@ -7,21 +7,61 @@ import {
   FiCpu,
   FiArrowRight,
   FiArrowDown,
+  FiActivity,
+  FiUsers,
+  FiEye,
 } from "react-icons/fi";
 import demoVideo from "../assets/videos/home.mp4";
 import sampleSvg from "../assets/maps/GROUND.svg";
+import useAnalyticsStats from "../hook/analytics/useAnalyticsStats";
 
 export default function Hero() {
   const navigate = useNavigate();
+  const { stats } = useAnalyticsStats();
 
   return (
     <section className="w-full px-6 pt-24 md:pt-32 pb-24">
       <div className="max-w-6xl mx-auto">
         {/* Hero */}
         <div className="text-center max-w-4xl mx-auto">
-          <div className="inline-flex items-center gap-2 px-4 py-1 rounded-full bg-green-500/20 text-green-400 text-sm mb-6">
+          {/* <div className="inline-flex items-center gap-2 px-4 py-1 rounded-full bg-green-500/20 text-green-400 text-sm mb-6">
             <FiMapPin size={14} />
             Interactive SVG Indoor Navigation
+          </div> */}
+
+          <div>
+            {stats && (
+              <div className="inline-flex flex-wrap items-center justify-center gap-4 px-5 py-2.5 rounded-full bg-white/5 border border-white/10 backdrop-blur-md mb-6">
+                <div className="flex items-center gap-2 text-green-400">
+                  <FiActivity className="animate-pulse" size={14} />
+                  <span className="text-sm font-medium">Live Activity</span>
+                </div>
+
+                <div className="h-4 w-px bg-white/10" />
+
+                <div className="flex items-center gap-2 text-white/80">
+                  <FiUsers size={14} />
+                  <span className="text-sm">
+                    <span className="font-semibold text-white">
+                      {stats.visitors.toLocaleString()}
+                    </span>{" "}
+                    explorers
+                  </span>
+                </div>
+
+                <div className="h-4 w-px bg-white/10" />
+
+                <div className="flex items-center gap-2 text-white/80">
+                  <FiEye size={14} />
+                  <span className="text-sm">
+                    <span className="font-semibold text-white">
+                      {stats.visits.toLocaleString()}
+                    </span>{" "}
+                    map views
+                  </span>
+                </div>
+              </div>
+            )}
           </div>
 
           <h1 className="text-4xl md:text-6xl font-bold text-white leading-tight">
@@ -102,7 +142,7 @@ export default function Hero() {
           <div className="absolute inset-x-0 top-0 h-4 bg-gradient-to-r from-transparent via-green-500/20 to-transparent blur-xl" />
 
           <div className="relative flex justify-center -translate-y-1/2">
-            <div className="flex items-center gap-2 px-4 py-2 rounded-full backdrop-blur-xl bg-white/5 border border-green-500/20 text-green-400 text-xs shadow-[0_0_30px_rgba(34,197,94,0.15)]">
+            <div className="flex items-center gap-2 px-4 py-2 rounded-full backdrop-blur-xl bg-white/5 border border-green-500/20 text-green-400 text-xs">
               <FiArrowRight size={12} />
               SVG → 3D Generation
             </div>
@@ -162,7 +202,7 @@ export default function Hero() {
                 Generated 3D Navigation
               </div>
 
-              <div className="aspect-video rounded-3xl overflow-hidden border border-green-500/20 bg-black shadow-[0_0_40px_rgba(34,197,94,0.15)]">
+              <div className="aspect-video rounded-3xl overflow-hidden border border-green-500/20 bg-black">
                 <video
                   autoPlay
                   muted
