@@ -34,7 +34,7 @@ export default function Hero() {
               <div className="inline-flex flex-wrap items-center justify-center gap-4 px-5 py-2.5 rounded-full bg-white/5 border border-white/10 backdrop-blur-md mb-6">
                 <div className="flex items-center gap-2 text-green-400">
                   <FiActivity className="animate-pulse" size={14} />
-                  <span className="text-sm font-medium">Live Activity</span>
+                  <span className="text-sm font-medium">Live</span>
                 </div>
 
                 <div className="h-4 w-px bg-white/10" />
@@ -45,7 +45,7 @@ export default function Hero() {
                     <span className="font-semibold text-white">
                       {stats.visitors.toLocaleString()}
                     </span>{" "}
-                    explorers
+                    visitors
                   </span>
                 </div>
 
@@ -57,7 +57,7 @@ export default function Hero() {
                     <span className="font-semibold text-white">
                       {stats.visits.toLocaleString()}
                     </span>{" "}
-                    map views
+                    views
                   </span>
                 </div>
               </div>
